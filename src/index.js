@@ -1,1 +1,5 @@
-import "./style.css";
+import './style.css';
+
+function tester() {}
+
+export { tester };
