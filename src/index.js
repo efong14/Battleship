@@ -28,6 +28,10 @@ function boardInit() {
     }
   }
 
+  function showBoard() {
+    return board;
+  }
+
   function fullCoordinate(start, end) {
     let fullCoordinates = [];
     if (start[0] == end[0]) {
@@ -43,10 +47,13 @@ function boardInit() {
     return fullCoordinates;
   }
 
-  function locationAdder(start, end) {
+  function currentCoordAdder(start, end) {
     currentCoord = [];
     currentCoord = fullCoordinate(start, end);
-    if (!shipLocations[0]) shipLocations = shipLocations.concat(currentCoord);
+  }
+
+  function shipLocationsAdder() {
+    shipLocations = shipLocations.concat(currentCoord);
   }
 
   function arrContains(arr, value) {
@@ -58,10 +65,28 @@ function boardInit() {
   }
 
   function placeShip(start, end, length) {
-    locationAdder;
+    currentCoordAdder(start, end);
+
+    if (collisionChecker(currentCoord) == true) {
+      return console.log('Ship collides with another, please choose different coordinates.');
+    }
+
+    board[currentCoord[0][0]][currentCoord[0][1]] = [ship(length), 'No hit'];
+    for (let i = 1; i < currentCoord.length; i++) {
+      board[currentCoord[i][0]][currentCoord[i][1]] = [currentCoord[0], 'No hit'];
+    }
+
+    shipLocationsAdder();
   }
 
-  return { fullCoordinate, locationAdder, collisionChecker };
+  return {
+    showBoard,
+    fullCoordinate,
+    currentCoordAdder,
+    shipLocationsAdder,
+    collisionChecker,
+    placeShip,
+  };
 }
 
 export { ship, boardInit };

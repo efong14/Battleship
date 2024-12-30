@@ -23,7 +23,8 @@ test('Place ship', () => {
 });
 
 test('Checks collision', () => {
-  boardT.locationAdder([0, 3], [0, 6]);
+  boardT.currentCoordAdder([0, 3], [0, 6]);
+  boardT.shipLocationsAdder();
   expect(
     boardT.collisionChecker([
       [0, 0],
@@ -33,4 +34,9 @@ test('Checks collision', () => {
       [0, 3],
     ])
   ).toBe(true);
+});
+
+test('Places boat', () => {
+  boardT.placeShip([1, 3], [1, 6], 4);
+  expect(boardT.showBoard()[1][3][1]).toBe('No hit');
 });
