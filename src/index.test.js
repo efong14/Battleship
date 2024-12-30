@@ -14,5 +14,23 @@ test('Battleship sunk', () => {
 });
 
 test('Place ship', () => {
-  expect(boardT.fullCoordinate([0, 3], [0, 6])).toBe(true);
+  expect(boardT.fullCoordinate([0, 3], [0, 6])).toStrictEqual([
+    [0, 3],
+    [0, 4],
+    [0, 5],
+    [0, 6],
+  ]);
+});
+
+test('Checks collision', () => {
+  boardT.locationAdder([0, 3], [0, 6]);
+  expect(
+    boardT.collisionChecker([
+      [0, 0],
+      [0, 10],
+      [0, 7],
+      [0, 1],
+      [0, 3],
+    ])
+  ).toBe(true);
 });

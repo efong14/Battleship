@@ -18,7 +18,8 @@ function ship(long) {
 
 function boardInit() {
   let board = [];
-  let shipPlacement = [];
+  let shipLocations = [];
+  let currentCoord = [];
 
   for (let i = 0; i < 10; i++) {
     board.push([]);
@@ -42,21 +43,25 @@ function boardInit() {
     return fullCoordinates;
   }
 
-  function placementAdder(start, end) {}
-
-  function collisionChecker(start, end) {}
-
-  function placeShip(start, end, length) {
-    shipPlacement.push([start, end]);
-    board[start[0]][start[1]].push(ship(length));
-    if (start[0] == end[0]) {
-      for (let i = start[1] + 1; i <= end[1]; i++) {
-        board[start[0]][start[i]].push();
-      }
-    }
+  function locationAdder(start, end) {
+    currentCoord = [];
+    currentCoord = fullCoordinate(start, end);
+    if (!shipLocations[0]) shipLocations = shipLocations.concat(currentCoord);
   }
 
-  return { fullCoordinate };
+  function arrContains(arr, value) {
+    return arr.some((element) => element[0] == value[0] && element[1] == value[1]);
+  }
+
+  function collisionChecker(arr) {
+    return arr.some((element) => arrContains(shipLocations, element));
+  }
+
+  function placeShip(start, end, length) {
+    locationAdder;
+  }
+
+  return { fullCoordinate, locationAdder, collisionChecker };
 }
 
 export { ship, boardInit };
