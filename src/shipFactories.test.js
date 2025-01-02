@@ -1,5 +1,5 @@
 import { experiments } from 'webpack';
-import { ship, boardInit } from './index.js';
+import { ship, boardInit } from './shipFactories';
 
 let shipT = ship(1);
 let boardT = boardInit();
@@ -36,7 +36,25 @@ test('Checks collision', () => {
   ).toBe(true);
 });
 
-test('Places boat', () => {
+test('Places ship', () => {
   boardT.placeShip([1, 3], [1, 6], 4);
   expect(boardT.showBoard()[1][3][1]).toBe('No hit');
+});
+
+test('Ship hit', () => {
+  expect(boardT.receiveAttack([1, 4])).toBe('Hit!');
+});
+
+test('Shot missed', () => {
+  expect(boardT.receiveAttack([0, 0])).toBe('Miss!');
+});
+
+test('Ship sunk', () => {
+  boardT.receiveAttack([1, 5]);
+  boardT.receiveAttack([1, 6]);
+  expect(boardT.receiveAttack([1, 3])).toBe('Ship sunk!');
+});
+
+test('Invalid result on repeat coordinate', () => {
+  expect(boardT.receiveAttack([1, 4])).toBe('Invalid coordinate, please choose another.');
 });
