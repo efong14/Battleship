@@ -1,16 +1,21 @@
 import { experiments } from 'webpack';
-import { ship, boardInit } from './shipFactories';
+import { ship, boardInit, players } from './shipFactories';
 
 let shipT = ship(1);
 let boardT = boardInit();
+let playersT = players();
 
 test('Initialize ship with length', () => {
   expect(shipT.length).toBe(1);
 });
 
-test('Battleship sunk', () => {
+test('Sinks initialized battleship', () => {
   shipT.hit();
   expect(shipT.isSunk()).toBe(true);
+});
+
+test('Stops coordinates outside the board', () => {
+  expect(boardT.coordChecker([11, 0], [1, 0])).toBe(false);
 });
 
 test('Place ship', () => {
@@ -38,23 +43,46 @@ test('Checks collision', () => {
 
 test('Places ship', () => {
   boardT.placeShip([1, 3], [1, 6], 4);
-  expect(boardT.showBoard()[1][3][1]).toBe('No hit');
+  expect(boardT.showBoard()[1][4][1]).toBe('No hit');
 });
 
-test('Ship hit', () => {
+test('Places ship of different length', () => {
+  boardT.placeShip([2, 3], [2, 4], 2);
+  expect(boardT.showBoard()[2][4][1]).toBe('No hit');
+});
+
+test('Hits ship', () => {
   expect(boardT.receiveAttack([1, 4])).toBe('Hit!');
 });
 
-test('Shot missed', () => {
+test('Misses ship', () => {
   expect(boardT.receiveAttack([0, 0])).toBe('Miss!');
 });
 
-test('Ship sunk', () => {
+test('Sinks ship', () => {
   boardT.receiveAttack([1, 5]);
   boardT.receiveAttack([1, 6]);
   expect(boardT.receiveAttack([1, 3])).toBe('Ship sunk!');
 });
 
-test('Invalid result on repeat coordinate', () => {
+test('Sinks all ships', () => {
+  boardT.receiveAttack([2, 3]);
+  expect(boardT.receiveAttack([2, 4])).toBe('All ships sunk!');
+});
+
+test('Returns invalid result on repeat coordinate', () => {
   expect(boardT.receiveAttack([1, 4])).toBe('Invalid coordinate, please choose another.');
+});
+
+test('Shows player boards', () => {
+  expect(playersT.human.board.showBoard()).toBeDefined;
+  expect(playersT.computer.board.showBoard()).toBeDefined;
+});
+
+test('Tracks hits individually per board', () => {
+  playersT.human.board.placeShip([1, 3], [1, 4], 2);
+  playersT.computer.board.placeShip([1, 3], [1, 4], 2);
+  playersT.human.board.receiveAttack([1, 3]);
+  expect(playersT.human.board.receiveAttack([1, 4])).toBe('All ships sunk!');
+  expect(playersT.computer.board.receiveAttack([1, 4])).toBe('Hit!');
 });

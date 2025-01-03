@@ -18,6 +18,8 @@ function boardInit() {
   let board = [];
   let shipLocations = [];
   let currentCoord = [];
+  let totalShips = 0;
+  let shipsSunk = 0;
 
   for (let i = 0; i < 10; i++) {
     board.push([]);
@@ -28,6 +30,11 @@ function boardInit() {
 
   function showBoard() {
     return board;
+  }
+
+  function coordChecker(start, end) {
+    let a = start.concat(end);
+    return a.every((e) => e < 10 && e > 0);
   }
 
   function fullCoordinate(start, end) {
@@ -72,6 +79,8 @@ function boardInit() {
       return 'Ship collides with another, please choose different coordinates.';
     }
 
+    totalShips++;
+
     board[currentCoord[0][0]][currentCoord[0][1]] = [ship(length), 'No hit'];
     for (let i = 1; i < currentCoord.length; i++) {
       board[currentCoord[i][0]][currentCoord[i][1]] = [currentCoord[0], 'No hit'];
@@ -97,7 +106,11 @@ function boardInit() {
       boardCoord[1] = 'hit';
       shipObj.hit();
 
-      if (shipObj.isSunk()) return 'Ship sunk!';
+      if (shipObj.isSunk()) {
+        shipsSunk++;
+        if (shipsSunk == totalShips) return 'All ships sunk!';
+        return 'Ship sunk!';
+      }
 
       return 'Hit!';
     }
@@ -106,7 +119,11 @@ function boardInit() {
       boardCoord[0].hit();
       boardCoord[1] = 'hit';
 
-      if (boardCoord[0].isSunk()) return 'Ship sunk!';
+      if (boardCoord[0].isSunk()) {
+        shipsSunk++;
+        if (shipsSunk == totalShips) return 'All ships sunk!';
+        return 'Ship sunk!';
+      }
 
       return 'Hit!';
     }
@@ -114,6 +131,7 @@ function boardInit() {
 
   return {
     showBoard,
+    coordChecker,
     fullCoordinate,
     currentCoordAdder,
     shipLocationsAdder,
@@ -123,4 +141,18 @@ function boardInit() {
   };
 }
 
-export { ship, boardInit };
+function players() {
+  const human = {
+    board: boardInit(),
+  };
+
+  const computer = {
+    board: boardInit(),
+  };
+
+  return { human, computer };
+}
+
+export { ship, boardInit, players };
+
+// PLACE CCOORDCHECKER INTO PLACESHIP FUNCTION AND TEST
