@@ -73,6 +73,9 @@ function boardInit() {
   }
 
   function placeShip(start, end, length) {
+    if (!coordChecker(start, end))
+      return 'Coordinates are invalid, please choose valid coordinates.';
+
     currentCoordAdder(start, end);
 
     if (collisionChecker(currentCoord) == true) {
@@ -155,4 +158,4 @@ function players() {
 
 export { ship, boardInit, players };
 
-// PLACE CCOORDCHECKER INTO PLACESHIP FUNCTION AND TEST
+// PLACE COORDCHECKER INTO PLACESHIP FUNCTION AND TEST

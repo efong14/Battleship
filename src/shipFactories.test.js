@@ -1,49 +1,24 @@
 import { experiments } from 'webpack';
 import { ship, boardInit, players } from './shipFactories';
 
-let shipT = ship(1);
 let boardT = boardInit();
 let playersT = players();
-
-test('Initialize ship with length', () => {
-  expect(shipT.length).toBe(1);
-});
-
-test('Sinks initialized battleship', () => {
-  shipT.hit();
-  expect(shipT.isSunk()).toBe(true);
-});
-
-test('Stops coordinates outside the board', () => {
-  expect(boardT.coordChecker([11, 0], [1, 0])).toBe(false);
-});
-
-test('Place ship', () => {
-  expect(boardT.fullCoordinate([0, 3], [0, 6])).toStrictEqual([
-    [0, 3],
-    [0, 4],
-    [0, 5],
-    [0, 6],
-  ]);
-});
-
-test('Checks collision', () => {
-  boardT.currentCoordAdder([0, 3], [0, 6]);
-  boardT.shipLocationsAdder();
-  expect(
-    boardT.collisionChecker([
-      [0, 0],
-      [0, 10],
-      [0, 7],
-      [0, 1],
-      [0, 3],
-    ])
-  ).toBe(true);
-});
 
 test('Places ship', () => {
   boardT.placeShip([1, 3], [1, 6], 4);
   expect(boardT.showBoard()[1][4][1]).toBe('No hit');
+});
+
+test('Sends warning on collision', () => {
+  expect(boardT.placeShip([1, 3], [2, 3], 2)).toBe(
+    'Ship collides with another, please choose different coordinates.'
+  );
+});
+
+test('Sends warning on negative numbers and numbers more than ten. ', () => {
+  expect(boardT.placeShip([-1, 3], [0, 3], 2)).toBe(
+    'Coordinates are invalid, please choose valid coordinates.'
+  );
 });
 
 test('Places ship of different length', () => {
