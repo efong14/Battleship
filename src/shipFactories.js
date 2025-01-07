@@ -79,7 +79,7 @@ function boardInit() {
     currentCoordAdder(start, end);
 
     if (collisionChecker(currentCoord) == true) {
-      return 'Ship collides with another, please choose different coordinates.';
+      return 'c';
     }
 
     totalShips++;
@@ -157,5 +157,3 @@ function players() {
 }
 
 export { ship, boardInit, players };
-
-// PLACE COORDCHECKER INTO PLACESHIP FUNCTION AND TEST
