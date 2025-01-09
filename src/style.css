@@ -1,1 +1,13 @@
+#gridBorder {
+  border: 1px black solid;
+}
 
+#gridOne {
+  display: grid;
+  border: 1px black solid;
+  height: 500px;
+  grid-template: 1fr 1fr / 1fr;
+}
+/* Use etch-a-sketch DOM to create 11x11 children for each grid. 
+Then use css grid to size them and make them have 11 columns and
+auto flow rows to 11 rows (Auto flow rows is default) */

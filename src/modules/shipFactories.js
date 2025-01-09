@@ -79,7 +79,7 @@ function boardInit() {
     currentCoordAdder(start, end);
 
     if (collisionChecker(currentCoord) == true) {
-      return 'c';
+      return 'Ship collides with another, please choose different coordinates.';
     }
 
     totalShips++;

@@ -1,2 +1,4 @@
 import './style.css';
-import { ship, boardInit, players } from './shipFactories';
+import { domManipulator } from './modules/DOM';
+
+domManipulator();
