@@ -92,8 +92,8 @@ function boardInit() {
     shipLocationsAdder();
   }
 
-  function receiveAttack(arr) {
-    let boardCoord = board[arr[0]][arr[1]];
+  function receiveAttack(coordinate) {
+    let boardCoord = board[coordinate[0]][coordinate[1]];
 
     if (boardCoord[1] == 'hit' || boardCoord[0] == 'miss') {
       return 'Invalid coordinate, please choose another.';
