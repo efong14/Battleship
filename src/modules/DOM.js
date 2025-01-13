@@ -88,11 +88,6 @@ function domManipulator() {
   gridCreator(numbersTwo, createTen, 'numbers', contentNumber, gridNumbers[1]);
   gridCreator(playGridOne, createHundred, 'playGrid', contentCoord, gridOne);
   gridCreator(playGridTwo, createHundred, 'playGrid', contentCoord, gridTwo);
-
-  //
-  let tester = document.querySelector('.playGrid');
-
-  tester.click();
 }
 
 export { domManipulator };
