@@ -32,9 +32,13 @@ function boardInit() {
     return board;
   }
 
+  function showShips() {
+    return shipLocations;
+  }
+
   function coordChecker(start, end) {
     let a = start.concat(end);
-    return a.every((e) => e < 10 && e > 0);
+    return a.every((e) => e < 10 && e >= 0);
   }
 
   function fullCoordinate(start, end) {
@@ -132,15 +136,28 @@ function boardInit() {
     }
   }
 
+  function placeRandom() {
+    placeShip([0, 0], [0, 4], 5);
+
+    placeShip([1, 9], [4, 9], 4);
+    placeShip([3, 9], [3, 9], 4);
+
+    placeShip([6, 0], [6, 2], 3);
+    placeShip([8, 0], [8, 2], 3);
+    placeShip([9, 0], [9, 2], 3);
+
+    placeShip([6, 8], [6, 9], 2);
+    placeShip([1, 2], [1, 3], 2);
+    placeShip([5, 2], [5, 3], 2);
+    placeShip([3, 2], [3, 3], 2);
+  }
+
   return {
     showBoard,
-    coordChecker,
-    fullCoordinate,
-    currentCoordAdder,
-    shipLocationsAdder,
-    collisionChecker,
+    showShips,
     placeShip,
     receiveAttack,
+    placeRandom,
   };
 }
 
