@@ -87,6 +87,13 @@ body {
 }
 
 .ship {
-  color: lightgreen;
   background-color: lightgreen;
+}
+
+.hit {
+  background-color: lightcoral;
+}
+
+.miss {
+  background-color: lightslategray;
 }

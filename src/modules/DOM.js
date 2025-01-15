@@ -47,20 +47,31 @@ function domManipulator() {
     });
   }
 
-  function contentCoord(arr) {
+  function attributeCoord(arr) {
     let arrValue = 0;
     for (let i = 0; i < 10; i++) {
       for (let j = 0; j < 10; j++) {
-        arr[arrValue].textContent = `${i},${j}`;
+        arr[arrValue].setAttribute('coord', `${i},${j}`);
         arrValue++;
       }
     }
   }
 
+  function clickEvent(el) {
+    const coordinate = el.getAttribute(`coord`).split(',');
+    console.log(playersDOM.computer.board.receiveAttack(coordinate));
+  }
+
+  function clickChange(el) {
+    const coordinate = el.getAttribute(`coord`).split(',');
+    el.classList.add(playersDOM.computer.board.showStatus(coordinate));
+  }
+
   function clickBinder(arr) {
     arr.forEach((element) => {
       element.onclick = () => {
-        console.log(element.textContent);
+        clickEvent(element);
+        clickChange(element);
       };
     });
   }
@@ -86,18 +97,14 @@ function domManipulator() {
   function coordToDOM(arr, player) {
     let translated = [];
     arr.forEach((element) => {
-      translated.push(
-        Array.from(document.querySelectorAll(`.${player}`)).find(
-          (el) => el.textContent === element.toString()
-        )
-      );
+      translated.push(document.querySelectorAll(`[coord="${element.toString()}"]`)[player]);
     });
     return translated;
   }
 
   function showShipsDOM() {
-    let shipsOne = coordToDOM(playersDOM.human.board.showShips(), 'playGridOne');
-    let shipsTwo = coordToDOM(playersDOM.computer.board.showShips(), 'playGridTwo');
+    let shipsOne = coordToDOM(playersDOM.human.board.showShips(), 0);
+    let shipsTwo = coordToDOM(playersDOM.computer.board.showShips(), 1);
 
     classAdd(shipsOne, 'ship');
     classAdd(shipsTwo, 'ship');
@@ -107,8 +114,8 @@ function domManipulator() {
   gridCreator(lettersTwo, createTen, 'letters', contentLetter, gridLetters[1]);
   gridCreator(numbersOne, createTen, 'numbers', contentNumber, gridNumbers[0]);
   gridCreator(numbersTwo, createTen, 'numbers', contentNumber, gridNumbers[1]);
-  gridCreator(playGridOne, createHundred, 'playGridOne', contentCoord, gridOne);
-  gridCreator(playGridTwo, createHundred, 'playGridTwo', contentCoord, gridTwo);
+  gridCreator(playGridOne, createHundred, 'playGridOne', attributeCoord, gridOne);
+  gridCreator(playGridTwo, createHundred, 'playGridTwo', attributeCoord, gridTwo);
 
   // TEST DELETE AFTER
   playersDOM.human.board.placeRandom();

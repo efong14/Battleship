@@ -36,6 +36,10 @@ function boardInit() {
     return shipLocations;
   }
 
+  function showStatus(coord) {
+    return board[coord[0]][coord[1]][1];
+  }
+
   function coordChecker(start, end) {
     let a = start.concat(end);
     return a.every((e) => e < 10 && e >= 0);
@@ -104,7 +108,7 @@ function boardInit() {
     }
 
     if (!boardCoord[0]) {
-      boardCoord[0] = 'miss';
+      boardCoord[1] = 'miss';
       return 'Miss!';
     }
 
@@ -155,6 +159,7 @@ function boardInit() {
   return {
     showBoard,
     showShips,
+    showStatus,
     placeShip,
     receiveAttack,
     placeRandom,
