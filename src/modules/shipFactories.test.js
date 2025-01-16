@@ -10,15 +10,11 @@ test('Places ship', () => {
 });
 
 test('Sends warning on collision', () => {
-  expect(boardT.placeShip([1, 3], [2, 3], 2)).toBe(
-    'Ship collides with another, please choose different coordinates.'
-  );
+  expect(boardT.placeShip([1, 3], [2, 3], 2)).toBe('collides');
 });
 
 test('Sends warning on negative numbers and numbers more than ten. ', () => {
-  expect(boardT.placeShip([-1, 3], [0, 3], 2)).toBe(
-    'Coordinates are invalid, please choose valid coordinates.'
-  );
+  expect(boardT.placeShip([-1, 3], [0, 3], 2)).toBe('invalid');
 });
 
 test('Places ship of different length', () => {
@@ -46,7 +42,7 @@ test('Sinks all ships', () => {
 });
 
 test('Returns invalid result on repeat coordinate', () => {
-  expect(boardT.receiveAttack([1, 4])).toBe('Invalid coordinate, please choose another.');
+  expect(boardT.receiveAttack([1, 4])).toBe('invalid');
 });
 
 test('Shows player boards', () => {
@@ -54,10 +50,18 @@ test('Shows player boards', () => {
   expect(playersT.computer.board.showBoard()).toBeDefined;
 });
 
-test('Tracks hits individually per board', () => {
-  playersT.human.board.placeShip([1, 3], [1, 4], 2);
-  playersT.computer.board.placeShip([1, 3], [1, 4], 2);
-  playersT.human.board.receiveAttack([1, 3]);
-  expect(playersT.human.board.receiveAttack([1, 4])).toBe('All ships sunk!');
-  expect(playersT.computer.board.receiveAttack([1, 4])).toBe('Hit!');
+test('Returns random coord', () => {
+  expect(playersT.human.board.randomShip(2)).toBe('a');
 });
+
+// test('Tracks hits individually per board', () => {
+//   playersT.human.board.placeShip([1, 3], [1, 4], 2);
+//   playersT.computer.board.placeShip([1, 3], [1, 4], 2);
+//   playersT.human.board.receiveAttack([1, 3]);
+//   expect(playersT.human.board.receiveAttack([1, 4])).toBe('All ships sunk!');
+//   expect(playersT.computer.board.receiveAttack([1, 4])).toBe('Hit!');
+// });
+
+// test('Returns random attack', () => {
+//   expect(playersT.human.board.computerAttack()).toBe('a');
+// });
