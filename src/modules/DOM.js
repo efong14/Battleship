@@ -3,6 +3,8 @@ import { ship, boardInit, players } from './shipFactories';
 function domManipulator() {
   const gridOne = document.getElementById('gridOne');
   const gridTwo = document.getElementById('gridTwo');
+  const compStatus = document.getElementById('compStatus');
+  const playerStatus = document.getElementById('playerStatus');
   const gridLetters = document.querySelectorAll('#gridLetters');
   const gridNumbers = document.querySelectorAll('#gridNumbers');
   const playersDOM = players();
@@ -59,19 +61,25 @@ function domManipulator() {
 
   function clickEvent(el) {
     const coordinate = el.getAttribute(`coord`).split(',');
-    console.log(playersDOM.computer.board.receiveAttack(coordinate));
+    const attack = playersDOM.computer.board.receiveAttack(coordinate);
+    el.classList.add(playersDOM.computer.board.showStatus(coordinate));
+    return attack;
   }
 
-  function clickChange(el) {
-    const coordinate = el.getAttribute(`coord`).split(',');
-    el.classList.add(playersDOM.computer.board.showStatus(coordinate));
+  function computerTurn() {
+    let computerTarget = playersDOM.human.board.computerAttack();
+    let domTarget = document.querySelectorAll(`[coord="${computerTarget[0].toString()}"]`)[0];
+    domTarget.classList.add(playersDOM.human.board.showStatus(computerTarget[0]));
+    return computerTarget[1];
   }
 
   function clickBinder(arr) {
     arr.forEach((element) => {
       element.onclick = () => {
-        clickEvent(element);
-        clickChange(element);
+        playerStatus.textContent = clickEvent(element);
+        if (playerStatus.textContent !== 'Invalid Target') {
+          compStatus.textContent = computerTurn();
+        }
       };
     });
   }
@@ -117,11 +125,9 @@ function domManipulator() {
   gridCreator(playGridOne, createHundred, 'playGridOne', attributeCoord, gridOne);
   gridCreator(playGridTwo, createHundred, 'playGridTwo', attributeCoord, gridTwo);
 
-  // TEST DELETE AFTER
   playersDOM.human.board.placeRandom();
   playersDOM.computer.board.placeRandom();
   showShipsDOM();
-  //
 }
 
 export { domManipulator };

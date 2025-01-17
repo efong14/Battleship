@@ -20,7 +20,7 @@ function boardInit() {
   let currentCoord = [];
   let totalShips = 0;
   let shipsSunk = 0;
-  let computerAttacks = [];
+  let attackedList = [];
 
   for (let i = 0; i < 10; i++) {
     board.push([]);
@@ -107,7 +107,7 @@ function boardInit() {
     let boardCoord = board[coordinate[0]][coordinate[1]];
 
     if (boardCoord[1] == 'hit' || boardCoord[1] == 'miss') {
-      return 'invalid';
+      return 'Invalid Target';
     }
 
     if (!boardCoord[0]) {
@@ -143,47 +143,50 @@ function boardInit() {
     }
   }
 
-  function randomCoordinate() {
-    return [Math.floor(Math.random() * (10 - 0) + 0), Math.floor(Math.random() * (10 - 0) + 0)];
+  function randomCoordinate(max) {
+    return [Math.floor(Math.random() * (max - 0) + 0), Math.floor(Math.random() * (max - 0) + 0)];
   }
 
-  // function randomShip(length) {
-  //   let direction = Math.random() < 0.5 ? 'vertical' : 'horizontal';
-  //   let firstCoord = randomCoordinate();
-  //   let secondCoord;
-  //   if (direction == 'vertical') {
-  //     secondCoord = [firstCoord[0] + length - 1, firstCoord[1]];
-  //   } else {
-  //     secondCoord = [firstCoord[0], firstCoord[1] + length - 1];
-  //   }
-  //   console.log(firstCoord, secondCoord);
+  function randomShipCoordinate(length) {
+    let direction = Math.random() < 0.5 ? 'vertical' : 'horizontal';
+    let firstCoord = randomCoordinate(10 - length);
+    let secondCoord;
+    if (direction == 'vertical') {
+      secondCoord = [firstCoord[0] + length - 1, firstCoord[1]];
+    } else {
+      secondCoord = [firstCoord[0], firstCoord[1] + length - 1];
+    }
+    return [firstCoord, secondCoord];
+  }
 
-  //   return placeShip(firstCoord, secondCoord, length);
-  // }
+  function randomShipPlacer(length) {
+    let generatedCoord = randomShipCoordinate(length);
+    let generatedFull = fullCoordinate(generatedCoord[0], generatedCoord[1]);
+
+    while (collisionChecker(generatedFull) == true) {
+      generatedCoord = randomShipCoordinate(length);
+      generatedFull = fullCoordinate(generatedCoord[0], generatedCoord[1]);
+    }
+
+    return placeShip(generatedCoord[0], generatedCoord[1], length);
+  }
 
   function computerAttack() {
-    // let coord = randomCoordinate();
-    let coord = randomCoordinate();
-    placeShip(coord, [1, 2], 2);
-    console.log(showBoard());
+    let coord = randomCoordinate(10);
+    while (arrContains(attackedList, coord)) {
+      coord = randomCoordinate(10);
+    }
+    attackedList.push(coord);
 
-    return receiveAttack(coord);
+    return [coord, receiveAttack(coord)];
   }
 
   function placeRandom() {
-    randomShip(5);
-
-    // placeShip([1, 9], [4, 9], 4);
-    // placeShip([3, 9], [3, 9], 4);
-
-    // placeShip([6, 0], [6, 2], 3);
-    // placeShip([8, 0], [8, 2], 3);
-    // placeShip([9, 0], [9, 2], 3);
-
-    // placeShip([6, 8], [6, 9], 2);
-    // placeShip([1, 2], [1, 3], 2);
-    // placeShip([5, 2], [5, 3], 2);
-    // placeShip([3, 2], [3, 3], 2);
+    randomShipPlacer(5);
+    randomShipPlacer(4);
+    randomShipPlacer(3);
+    randomShipPlacer(2);
+    randomShipPlacer(2);
   }
 
   return {
@@ -193,7 +196,7 @@ function boardInit() {
     placeShip,
     receiveAttack,
     computerAttack,
-    randomShip,
+    randomShipPlacer,
     placeRandom,
   };
 }
